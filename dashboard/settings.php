@@ -4,7 +4,7 @@ $conn = new Database;
 
 session_start();
 if (!isset($_SESSION["user"]) && !isset($_SESSION["email"])) {
-  header("Location: ../login");
+  header("Location: ../login.php");
   exit();
 }
 
@@ -12,6 +12,7 @@ $data = $conn->fetchPlayer($_SESSION["user"]);
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,46 +26,50 @@ $data = $conn->fetchPlayer($_SESSION["user"]);
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-V4K593FW9L"></script>
   <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-    
-      gtag('config', 'G-V4K593FW9L');
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+
+    gtag('config', 'G-V4K593FW9L');
   </script>
 </head>
+
 <body>
   <?php include_once "../vendor/navbar.php"; ?>
-      <div class="page-content">
+  <div class="page-content">
+    <div class="container">
+      <div class="card mx-auto">
         <div class="container">
-          <div class="card mx-auto">
-            <div class="container">
-              <div class="card-header">
-                <h3 class="card-title"><i class="material-icons set">settings</i>RT:RP - Settings</h3>
-              </div>
-              <div class="card-body">
-                <div class="form-group">
-                  <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#modal-changepass">Change Password</button>
-                </div>
-                <div class="form-group">
-                  <button class="btn btn-success btn-lg" type="button" data-toggle="modal" data-target="#modal-changeemail">Change Email</button>
-                </div>
-              </div>
+          <div class="card-header">
+            <h3 class="card-title"><i class="material-icons set">settings</i>RT:RP - Settings</h3>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#modal-changepass">Change Password</button>
+            </div>
+            <div class="form-group">
+              <button class="btn btn-success btn-lg" type="button" data-toggle="modal" data-target="#modal-changeemail">Change Email</button>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  
+  </div>
+  </div>
+
   <!-- Modal Changepass -->
   <div class="modal fade" id="modal-changepass" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">RT:RP - Change Password</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
         <form method="post" id="form-changepass">
           <div class="modal-body">
@@ -95,9 +100,9 @@ $data = $conn->fetchPlayer($_SESSION["user"]);
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">RT:RP - Change Email</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
         <form method="post" id="form-changeemail">
           <div class="modal-body">
@@ -129,4 +134,5 @@ $data = $conn->fetchPlayer($_SESSION["user"]);
   <script src="../assets/js/dashboard/script.js"></script>
   <script src="../assets/js/settings/script.js"></script>
 </body>
+
 </html>
