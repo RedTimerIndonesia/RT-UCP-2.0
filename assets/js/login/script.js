@@ -11,7 +11,7 @@ $(document).ready(function(){
             success: (data) => {
                 if (parseInt(data.status) == 1) {
                     swal('Login Successfully', data.message, 'success').then(function(){
-                        window.location.href = "./dashboard/index";
+                        window.location.href = "./dashboard/index.php";
                     });
                 } else if (parseInt(data.status) == 0) {
                     swal('Login Failed', data.message, 'error');

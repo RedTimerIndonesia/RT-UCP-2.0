@@ -65,7 +65,7 @@ $(document).ready(function(){
             success: (data) => {
                 if (parseInt(data.status) == 1) {
                     swal('Reset Password', data.message, 'success').then(function(){
-                        window.location.href = "./login";
+                        window.location.href = "./login.php";
                     });
                 } else if (parseInt(data.status) == 0) {
                     swal('Reset Password', data.message, 'error');

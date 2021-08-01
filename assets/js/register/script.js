@@ -15,7 +15,7 @@ $(document).ready(function(){
                 } else if (parseInt(data.status) == 1) {
                     btn.disabled = true;
                     swal('Registration Success', data.message, 'success').then(function(){
-                        window.location.href = "./login";
+                        window.location.href = "./login.php";
                     });
                 }
             }
