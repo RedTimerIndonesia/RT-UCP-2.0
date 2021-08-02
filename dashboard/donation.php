@@ -4,14 +4,15 @@ $conn = new Database;
 
 session_start();
 if (!isset($_SESSION["user"]) && !isset($_SESSION["email"])) {
-    header("Location: ../login");
-    exit();
+  header("Location: ../login.php");
+  exit();
 }
 
 $data = $conn->fetchPlayer($_SESSION["user"]);
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,86 +25,116 @@ $data = $conn->fetchPlayer($_SESSION["user"]);
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-V4K593FW9L"></script>
   <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-    
-      gtag('config', 'G-V4K593FW9L');
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+
+    gtag('config', 'G-V4K593FW9L');
   </script>
 </head>
+
 <body>
   <?php include_once "../vendor/navbar.php"; ?>
-      <div class="page-content">
-        <div class="container-donation">
-          <h4><b>Giftcode Request</b></h4>
-          <table class="table table-def table-condensed table-striped table-bordered table-hover">
-            <thead>
-              <tr><th>ID</th><th>Package</th><th>Proof</th><th>Status</th></tr>
-            </thead>
-            <tbody>
-              <?php 
-              $email = $_SESSION["email"];
-              $query = $conn->db->prepare("SELECT * FROM vouchers WHERE email = '$email'");
-              $query->execute();
-              if ($query->rowCount() > 0) :
-                while($data = $query->fetch(PDO::FETCH_ASSOC)) :
-              ?>
+  <div class="page-content">
+    <div class="container-donation">
+      <h4><b>Giftcode Request</b></h4>
+      <table class="table table-def table-condensed table-striped table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Package</th>
+            <th>Proof</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php
+          $email = $_SESSION["email"];
+          $query = $conn->db->prepare("SELECT * FROM vouchers WHERE email = '$email'");
+          $query->execute();
+          if ($query->rowCount() > 0) :
+            while ($data = $query->fetch(PDO::FETCH_ASSOC)) :
+          ?>
               <tr>
                 <td><?= $data["id"]; ?></td>
-                <td><?php if ($data["vip"] == 1) echo "Reguler"; elseif ($data["vip"] == 2) echo "Premium"; elseif ($data["vip"] == 3) echo "VIP Player"; elseif ($data["gold"] != 0) echo "Gold (".$data["gold"].")"; ?></td>
+                <td><?php if ($data["vip"] == 1) echo "Reguler";
+                    elseif ($data["vip"] == 2) echo "Premium";
+                    elseif ($data["vip"] == 3) echo "VIP Player";
+                    elseif ($data["gold"] != 0) echo "Gold (" . $data["gold"] . ")"; ?></td>
                 <td><?= $data["bukti"]; ?></td>
-                <td><?php if ($data["status"] == 0) echo "<span class='badge badge-warning'>Pending</span>"; elseif($data["status"] == 1 || $data["status"] == 3) echo "<span class'badge bg-success'>Accepted</span>"; elseif ($data["status"] == 2) echo "<span class='badge badge-danger'>Denied</span>"; ?></td>
+                <td><?php if ($data["status"] == 0) echo "<span class='badge badge-warning'>Pending</span>";
+                    elseif ($data["status"] == 1 || $data["status"] == 3) echo "<span class'badge bg-success'>Accepted</span>";
+                    elseif ($data["status"] == 2) echo "<span class='badge badge-danger'>Denied</span>"; ?></td>
               </tr>
-              <?php endwhile;
-              else : ?>
-              <tr><td colspan="4"><b style="color:red">Kamu belum pernah merequest!</b></td></tr>
-              <?php endif; ?>
-            </tbody>
-            <tfoot>
-              <tr><td colspan="4"><button class="btn btn-success" id="btn-req" type="button" data-toggle="modal" data-target="#modal-req">Request</button></td></tr>
-            </tfoot>
-          </table>
+            <?php endwhile;
+          else : ?>
+            <tr>
+              <td colspan="4"><b style="color:red">Kamu belum pernah merequest!</b></td>
+            </tr>
+          <?php endif; ?>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="4"><button class="btn btn-success" id="btn-req" type="button" data-toggle="modal" data-target="#modal-req">Request</button></td>
+          </tr>
+        </tfoot>
+      </table>
 
-          <h4><b>Giftcodes</b></h4>
-          <table class="table table-def table-condensed table-striped table-hover table-bordered">
-            <thead>
-              <tr><th>ID #</th><th>Package</th><th>Duration</th><th>Giftcode</th><th>Status</th></tr>
-            </thead>
-            <tbody>
-              <?php
-              $mail = $_SESSION["email"];
-              $sql = $conn->db->prepare("SELECT * FROM vouchers WHERE email = '$mail' AND status = 1");
-              $sql->execute();
-              if ($sql->rowCount() > 0) :
-                while($gData = $sql->fetch(PDO::FETCH_ASSOC)) :
-              ?>
+      <h4><b>Giftcodes</b></h4>
+      <table class="table table-def table-condensed table-striped table-hover table-bordered">
+        <thead>
+          <tr>
+            <th>ID #</th>
+            <th>Package</th>
+            <th>Duration</th>
+            <th>Giftcode</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php
+          $mail = $_SESSION["email"];
+          $sql = $conn->db->prepare("SELECT * FROM vouchers WHERE email = '$mail' AND status = 1");
+          $sql->execute();
+          if ($sql->rowCount() > 0) :
+            while ($gData = $sql->fetch(PDO::FETCH_ASSOC)) :
+          ?>
               <tr>
                 <td><?= $gData["id"]; ?></td>
-                <td><?php if ($gData["vip"] == 1) echo "Reguler"; elseif ($gData["vip"] == 2) echo "Premium"; elseif ($gData["vip"] == 3) echo "VIP Player"; elseif ($gData["gold"] != 0) echo "Gold (".$gData["gold"].")"; ?></td>
-                <td><?php if ($gData["duration"] != 0) echo $gData["duration"]." Days"; ?></td>
+                <td><?php if ($gData["vip"] == 1) echo "Reguler";
+                    elseif ($gData["vip"] == 2) echo "Premium";
+                    elseif ($gData["vip"] == 3) echo "VIP Player";
+                    elseif ($gData["gold"] != 0) echo "Gold (" . $gData["gold"] . ")"; ?></td>
+                <td><?php if ($gData["duration"] != 0) echo $gData["duration"] . " Days"; ?></td>
                 <td><?= $gData["code"]; ?></td>
-                <td><?php if ($gData["status"] == 1 && $gData["claim"] == 0) echo "<span class'badge bg-success'>Not claimed</span>"; elseif ($gData["claim"] == 1) echo "<span class='badge badge-warning'>Claimed by ". $gData["donature"] ."</span>"; ?></td>
+                <td><?php if ($gData["status"] == 1 && $gData["claim"] == 0) echo "<span class'badge bg-success'>Not claimed</span>";
+                    elseif ($gData["claim"] == 1) echo "<span class='badge badge-warning'>Claimed by " . $gData["donature"] . "</span>"; ?></td>
               </tr>
-              <?php endwhile;
-              else : ?>
-              <tr><td colspan="5"><b style="color: red">Kamu belum memiliki giftcode!</b></td></tr>
-              <?php endif; ?>
-            </tbody>
-          </table>
-        </div>
-      </div>
+            <?php endwhile;
+          else : ?>
+            <tr>
+              <td colspan="5"><b style="color: red">Kamu belum memiliki giftcode!</b></td>
+            </tr>
+          <?php endif; ?>
+        </tbody>
+      </table>
     </div>
   </div>
-  
+  </div>
+  </div>
+
   <!-- Modal Request -->
   <div class="modal fade" id="modal-req" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Request Giftcode</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
         <form method="post" id="form-req">
           <div class="modal-body">
@@ -171,11 +202,12 @@ $data = $conn->fetchPlayer($_SESSION["user"]);
       </div>
     </div>
   </div>
-  
+
   <script src="../assets/js/jquery/jquery.min.js"></script>
   <script src="../assets/js/bootstrap/bootstrap.bundle.min.js"></script>
   <script src="../assets/js/swal2/sweetalert2.min.js"></script>
   <script src="../assets/js/dashboard/script.js"></script>
   <script src="../assets/js/donation/script.js"></script>
 </body>
+
 </html>
